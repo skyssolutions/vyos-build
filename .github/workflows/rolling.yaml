@@ -92,6 +92,10 @@ jobs:
            vyos-build/packages/linux-kernel/kernel-vars
           key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}
 
+      - name: Symlink kernel
+        run: |
+          ln -s /usr/src/linux $GITHUB_WORKSPACE/vyos-build/packages/linux-kernel/linux
+
       - name: Restore cached ixgbe kernel module
         id: kernel-module-ixgbe-cache-restore
         uses: buildjet/cache/restore@v3
