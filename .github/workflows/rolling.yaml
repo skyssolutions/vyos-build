@@ -83,16 +83,36 @@ jobs:
 
       - name: Save kernel to cache
         uses: buildjet/cache/save@v3
+        if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
         id: kernel-cache
         with:
           path: |
            vyos-build/packages/linux-kernel/linux
+           vyos-build/packages/linux-kernel/kernel-vars
           key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}
+
+      - name: Restore cached ixgbe kernel module
+        id: kernel-module-ixgbe-cache-restore
+        uses: buildjet/cache/restore@v3
+        with:
+          path: |
+            vyos-build/packages/linux-kernel/linux/ixgbe**
+          key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}-ixgbe
 
       - name: Compile ixgbe module
         working-directory: vyos-build/packages/linux-kernel
+        if: steps.kernel-module-ixgbe-cache-restore.outputs.cache-hit != 'true'
         run: |
           sudo ./build-intel-ixgbe.sh
+
+      - name: Save ixgbe module to cache
+        uses: buildjet/cache/save@v3
+        if: steps.kernel-module-ixgbe-cache-restore.outputs.cache-hit != 'true'
+        id: kernel-module-ixgbe-cache
+        with:
+          path: |
+            vyos-build/packages/linux-kernel/linux/ixgbe**
+          key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}-ixgbe
 
       - name: Copy all debs to be installed
         run: |
