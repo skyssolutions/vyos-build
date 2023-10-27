@@ -13,6 +13,7 @@ env:
   VYOS_BUILD_BY: autobuild-vyos@samipsolutions.fi
   VYOS_BUILD_TYPE: release
   VYOS_VERSION: 1.4-rolling
+  VYOS_KERNEL_VERSION: 6.1.60
 
 jobs:
   release:
@@ -60,6 +61,10 @@ jobs:
         run: |
           cp -Rv custom-patches/ vyos-build/packages/linux-kernel/
           mv vyos-build/packages/linux-kernel/custom-patches/patches/linux-kernel/build-intel-ixgbe.sh ../ 
+
+      - name: Fetch kernel sources
+        working-directory: vyos-build/packages/linux-kernel
+        run: git clone -b ${{ env.VYOS_KERNEL_VERSION }} --single-branch https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
 
       - name: Compile kernel
         working-directory: vyos-build/packages/linux-kernel
