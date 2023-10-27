@@ -45,7 +45,7 @@ if [ -d ${DRIVER_DIR} ]; then
 fi
 mkdir -p ${DRIVER_DIR}
 tar -C ${DRIVER_DIR} --strip-components=1 -xf ${DRIVER_FILE}
-cp -v ${CWD}/patches/linux-kernel/ixgbe/common.mk ${DRIVER_DIR}/src
+cp -v ${CWD}/custom-patches/patches/linux-kernel/ixgbe/common.mk ${DRIVER_DIR}/src
 
 cd ${DRIVER_DIR}/src
 if [ -z $KERNEL_DIR ]; then

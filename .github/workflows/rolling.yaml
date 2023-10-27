@@ -59,7 +59,7 @@ jobs:
       - name: Copy custom patches to linux-kernel folder
         run: |
           cp -Rv custom-patches/ vyos-build/packages/linux-kernel/
-          mv vyos-build/packages/linux-kernel/patches/build-intel-ixgbe.sh ../ 
+          mv vyos-build/packages/linux-kernel/custom-patches/patches/linux-kernel/build-intel-ixgbe.sh ../ 
 
       - name: Compile kernel
         working-directory: vyos-build/packages/linux-kernel
