@@ -46,7 +46,7 @@ fi
 mkdir -p ${DRIVER_DIR}
 tar -C ${DRIVER_DIR} --strip-components=1 -xf ${DRIVER_FILE}
 cp -v ${CWD}/custom-patches/patches/linux-kernel/ixgbe/common.mk ${DRIVER_DIR}/src
-sed -i 's/-                            VXLAN_HEADROOM))/+                            VXLAN_HF_RCO))/g' ${DRIVER_DIR}/src/ixgbe_main.c
+sed -i 's/VXLAN_HEADROOM))/VXLAN_HF_RCO))/g' ${DRIVER_DIR}/src/ixgbe_main.c
 
 cd ${DRIVER_DIR}/src
 if [ -z $KERNEL_DIR ]; then
