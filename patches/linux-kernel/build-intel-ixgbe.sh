@@ -84,6 +84,12 @@ fpm --input-type dir --output-type deb --name vyos-intel-${DRIVER_NAME} \
 
 echo "I: Cleanup ${DRIVER_NAME} source"
 cd ${CWD}
+if [[ $? == 0 ]]; then
+    for package in $(ls vyos-intel-ixgbe*.deb)
+    do
+        ln -sf linux-kernel/$package ..
+    done
+fi
 if [ -e ${DRIVER_FILE} ]; then
     rm -f ${DRIVER_FILE}
 fi
