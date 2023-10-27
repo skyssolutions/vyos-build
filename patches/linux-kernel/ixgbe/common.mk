@@ -66,7 +66,7 @@ KSP :=  /lib/modules/${BUILD_KERNEL}/source \
         /usr/src/linux \
         /usr/src/kernels/${BUILD_KERNEL} \
         /usr/src/kernels \
-        /vyos/packages/linux-kernel/linux
+        vyos-build/packages/linux-kernel/linux
 
 # prune the list down to only values that exist and have an include/linux
 # sub-directory. We can't use include/config because some older kernels don't
