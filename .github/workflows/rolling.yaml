@@ -17,7 +17,7 @@ env:
 
 jobs:
   release:
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: buildjet-8vcpu-ubuntu-2204
     permissions:
       # Need permission to write to the Releases tab now.
       # https://github.com/ncipollo/release-action/issues/208.
@@ -60,16 +60,33 @@ jobs:
       - name: Copy custom patches to linux-kernel folder
         run: |
           cp -Rv custom-patches/ vyos-build/packages/linux-kernel/
-          mv vyos-build/packages/linux-kernel/custom-patches/patches/linux-kernel/build-intel-ixgbe.sh ../ 
+          mv -v vyos-build/packages/linux-kernel/custom-patches/patches/linux-kernel/build-intel-ixgbe.sh ../ 
 
       - name: Fetch kernel sources
         working-directory: vyos-build/packages/linux-kernel
         run: git clone -b ${{ env.VYOS_KERNEL_VERSION }} --single-branch https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
 
+      - name: Restore cached kernel
+        id: cache-kernel-restore
+        uses: buildjet/cache/restore@v3
+        with:
+          path: |
+            vyos-build/packages/linux-kernel/linux
+          key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}
+
       - name: Compile kernel
         working-directory: vyos-build/packages/linux-kernel
+        if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
         run: |
           sudo ./build-kernel.sh
+
+      - name: Save kernel to cache
+        uses: buildjet/cache/save@v3
+        id: kernel-cache
+        with:
+          path: |
+           vyos-build/packages/linux-kernel/linux
+          key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}
 
       - name: Compile ixgbe module
         working-directory: vyos-build/packages/linux-kernel
