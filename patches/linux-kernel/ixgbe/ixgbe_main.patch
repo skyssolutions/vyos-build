@@ -1,0 +1,11 @@
+--- original_ixgbe/ixgbe-5.19.6/src/ixgbe_main.c        2023-06-19 11:20:09.000000000 +0300
++++ ixgbe-5.19.6/src/ixgbe_main.c       2023-10-18 19:31:04.420849417 +0300
+@@ -9869,7 +9869,7 @@
+                struct ixgbe_adapter *adapter = q_vector->adapter;
+
+                if (unlikely(skb_tail_pointer(skb) < hdr.network +
+-                            VXLAN_HEADROOM))
++                            VXLAN_HF_RCO))
+                        return;
+
+                /* verify the port is recognized as VXLAN or GENEVE*/

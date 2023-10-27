@@ -46,6 +46,8 @@ fi
 mkdir -p ${DRIVER_DIR}
 tar -C ${DRIVER_DIR} --strip-components=1 -xf ${DRIVER_FILE}
 cp -v ${CWD}/custom-patches/patches/linux-kernel/ixgbe/common.mk ${DRIVER_DIR}/src
+cp -v ${CWD}/custom-patches/patches/linux-kernel/ixgbe/ixgbe_main.patch ${CWD}
+patch -p1 <  ${CWD}/ixgbe_main.patch
 
 cd ${DRIVER_DIR}/src
 if [ -z $KERNEL_DIR ]; then
