@@ -94,10 +94,8 @@ jobs:
 
       - name: Symlink kernel
         run: |
-          echo $GITHUB_WORKSPACE
           mkdir -p /usr/src
-          ln -s /usr/src/linux $GITHUB_WORKSPACE/vyos-build/packages/linux-kernel/linux
-          ls -al /usr/src/linux
+          ln -sv $GITHUB_WORKSPACE/vyos-build/packages/linux-kernel/linux /usr/src/linux
 
       - name: Restore cached ixgbe kernel module
         id: kernel-module-ixgbe-cache-restore
