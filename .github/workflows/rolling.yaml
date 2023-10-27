@@ -42,7 +42,7 @@ jobs:
       - name: Setup variables
         id: vars
         run: |
-          build_date=$(date +%Y%m%d%H%M)
+          build_date=$(date -u +%d%m%YT%H%M)
           echo "tag-name=${{ env.VYOS_VERSION }}-${build_date}" >> "$GITHUB_OUTPUT"
           echo "iso-name=${{ env.VYOS_VERSION }}-${build_date}-${{ env.VYOS_ARCH }}" >> "$GITHUB_OUTPUT"
 
