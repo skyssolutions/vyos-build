@@ -1,5 +1,5 @@
 ---
-name: VyOS Rolling
+name: VyOS Rolling (1.4)
 
 on:
   workflow_dispatch:
