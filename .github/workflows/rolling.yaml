@@ -68,6 +68,7 @@ jobs:
         with:
           path: |
             vyos-build/packages/linux-kernel/linux
+            vyos-build/packages/linux-kernel/kernel-vars
           key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}
 
       - name: Fetch kernel sources
