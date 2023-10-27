@@ -95,6 +95,7 @@ jobs:
       - name: Symlink kernel
         run: |
           echo $GITHUB_WORKSPACE
+          mkdir -p /usr/src
           ln -s /usr/src/linux $GITHUB_WORKSPACE/vyos-build/packages/linux-kernel/linux
           ls -al /usr/src/linux
 
