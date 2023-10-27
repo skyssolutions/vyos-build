@@ -115,10 +115,6 @@ jobs:
             vyos-build/packages/linux-kernel/linux/ixgbe**
           key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}-ixgbe
 
-      - name: Copy all debs to be installed
-        run: |
-          cp -Rv vyos-build/packages/linux-kernel/**.deb vyos-build/packages/
-
       - name: Configure
         working-directory: vyos-build
         run: |
