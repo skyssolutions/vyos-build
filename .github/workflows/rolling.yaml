@@ -102,7 +102,7 @@ jobs:
         uses: buildjet/cache/restore@v3
         with:
           path: |
-            vyos-build/packages/linux-kernel/linux/ixgbe**
+            vyos-build/packages/linux-kernel/ixgbe**
           key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}-ixgbe
 
       - name: Compile ixgbe module
@@ -117,7 +117,7 @@ jobs:
         id: kernel-module-ixgbe-cache
         with:
           path: |
-            vyos-build/packages/linux-kernel/linux/ixgbe**
+            vyos-build/packages/linux-kernel/ixgbe**
           key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}-ixgbe
 
       - name: Configure
