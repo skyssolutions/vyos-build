@@ -62,10 +62,6 @@ jobs:
           cp -Rv custom-patches/ vyos-build/packages/linux-kernel/
           mv -v vyos-build/packages/linux-kernel/custom-patches/patches/linux-kernel/build-intel-ixgbe.sh vyos-build/packages/linux-kernel/
 
-      - name: Fetch kernel sources
-        working-directory: vyos-build/packages/linux-kernel
-        run: git clone -b ${{ env.VYOS_KERNEL_VERSION }} --single-branch https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-
       - name: Restore cached kernel
         id: cache-kernel-restore
         uses: buildjet/cache/restore@v3
@@ -73,6 +69,11 @@ jobs:
           path: |
             vyos-build/packages/linux-kernel/linux
           key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}
+
+      - name: Fetch kernel sources
+        working-directory: vyos-build/packages/linux-kernel
+        if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
+        run: git clone -b ${{ env.VYOS_KERNEL_VERSION }} --single-branch https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
 
       - name: Compile kernel
         working-directory: vyos-build/packages/linux-kernel
