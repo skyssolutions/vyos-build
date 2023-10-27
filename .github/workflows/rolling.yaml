@@ -97,6 +97,11 @@ jobs:
           mkdir -p /usr/src
           ln -sv $GITHUB_WORKSPACE/vyos-build/packages/linux-kernel/linux /usr/src/linux
 
+      - name: Debug ls of packages and linux-kernel folder
+        run: |
+          ls -al vyos-build/packages
+          ls -al vyos-build/packages/linux-kernel/
+
       - name: Restore cached ixgbe kernel module
         id: kernel-module-ixgbe-cache-restore
         uses: buildjet/cache/restore@v3
