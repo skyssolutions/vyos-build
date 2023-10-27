@@ -77,11 +77,38 @@ jobs:
         if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
         run: git clone -b ${{ env.VYOS_KERNEL_VERSION }} --single-branch https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
 
+      - name: Fetch linux-firmware sources
+        working-directory: vyos-build/packages/linux-kernel
+        if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
+        run: |
+         git clone https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+         cd linux-firmware && git checkout 20230625
+
       - name: Compile kernel
         working-directory: vyos-build/packages/linux-kernel
         if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
         run: |
           sudo ./build-kernel.sh
+
+      - name: Compile linux firmware
+        working-directory: vyos-build/packages/linux-kernel
+        if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
+        run: |
+          ./build-linux-firmware.sh
+
+      - name: Compile Accel-PPP out-of-tree module
+        working-directory: vyos-build/packages/linux-kernel
+        if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
+        run: |
+          git clone https://github.com/accel-ppp/accel-ppp.git
+          cd accel-ppp && git checkout 9669bcb99adc && cd ..
+          ./build-accel-ppp.sh
+
+      - name: Compile Intel QAT (Quick-Assist Technology) drivers
+        working-directory: vyos-build/packages/linux-kernel
+        if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
+        run: |
+          ./build-intel-qat.sh
 
       - name: Save kernel to cache
         uses: buildjet/cache/save@v3
@@ -126,7 +153,6 @@ jobs:
           path: |
             vyos-build/packages/linux-kernel/ixgbe**
           key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}-ixgbe
-
 
       - name: "Create symbolic links for cached .deb files"
         if: steps.cache-kernel-restore.outputs.cache-hit == 'true' || steps.kernel-module-ixgbe-cache-restore.outputs.cache-hit == 'true'
