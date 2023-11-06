@@ -176,7 +176,7 @@ jobs:
               --architecture ${{ env.VYOS_ARCH }} \
               --build-by ${{ env.VYOS_BUILD_BY }} \
               --build-type ${{ env.VYOS_BUILD_TYPE }} \
-              --build-comment "VyOS with additional packages" \
+              --build-comment "VyOS with additional packages and custom kernel" \
               --version ${{ steps.vars.outputs.tag-name }} \
               --custom-package "git" \
               --custom-package "iptables" \
