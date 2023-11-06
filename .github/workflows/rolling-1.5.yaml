@@ -13,7 +13,7 @@ env:
   VYOS_BUILD_BY: autobuild-vyos@samipsolutions.fi
   VYOS_BUILD_TYPE: release
   VYOS_VERSION: 1.5-rolling
-  VYOS_KERNEL_VERSION: v6.1.60
+  VYOS_KERNEL_VERSION: v6.1.61
 
 jobs:
   release:
@@ -155,7 +155,7 @@ jobs:
         id: kernel-module-ixgbe-cache
         with:
           path: |
-            vyos-build/packages/linux-kernel/ixgbe**
+            vyos-build/packages/linux-kernel/ixgbe-5.19.6/*
           key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}-ixgbe
 
       - name: "Create symbolic links for cached .deb files"
@@ -187,7 +187,7 @@ jobs:
               --custom-package "tree"
 
       - name: Create release with artifact
-        uses: ncipollo/release-action@a2e71bdd4e7dab70ca26a852f29600c98b33153e # v1
+        uses: ncipollo/release-action@6c75be85e571768fa31b40abf38de58ba0397db5 # v1.13.0
         with:
           token: "${{ steps.generate-token.outputs.token }}"
           tag: "v${{ steps.vars.outputs.tag-name }}"
@@ -196,6 +196,14 @@ jobs:
           body: |
             Official VyOS Changelog:
             https://docs.vyos.io/en/latest/changelog/1.5.html
+
+      - name: Delete orphaned release
+        if: failure()
+        uses: dev-drprasad/delete-tag-and-release@5eafd8668311bf3e4d6c1e9898f32a317103de68 # v0.2.1
+        with:
+          github_token: "${{ steps.generate-token.outputs.token }}"
+          tag_name: "v${{ steps.vars.outputs.tag-name }}"
+          delete_release: true
 
       - name: Remove old releases
         uses: dev-drprasad/delete-older-releases@v0.2.1
