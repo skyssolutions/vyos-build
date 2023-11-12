@@ -13,7 +13,7 @@ env:
   VYOS_BUILD_BY: autobuild-vyos@samipsolutions.fi
   VYOS_BUILD_TYPE: release
   VYOS_VERSION: 1.5-rolling
-  VYOS_KERNEL_VERSION: v6.1.61
+  VYOS_KERNEL_VERSION: v6.1.62
 
 jobs:
   release:
@@ -200,8 +200,9 @@ jobs:
       - name: Delete orphaned release
         if: failure()
         uses: dev-drprasad/delete-tag-and-release@5eafd8668311bf3e4d6c1e9898f32a317103de68 # v0.2.1
-        with:
+        env:
           github_token: "${{ steps.generate-token.outputs.token }}"
+        with:
           tag_name: "v${{ steps.vars.outputs.tag-name }}"
           delete_release: true
 
