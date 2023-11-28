@@ -67,7 +67,7 @@ jobs:
             vyos-build/packages/linux-kernel/linux-firmware
             vyos-build/packages/linux-kernel/accel-ppp
             vyos-build/packages/linux-kernel/**/*.deb
-          key: ${{ runner.os }}-${{ VYOS_VERSION }}-${{ env.VYOS_KERNEL_VERSION }}
+          key: ${{ runner.os }}-${{ env.VYOS_VERSION }}-${{ env.VYOS_KERNEL_VERSION }}
 
       - name: Fetch kernel sources
         working-directory: vyos-build/packages/linux-kernel
@@ -119,7 +119,7 @@ jobs:
             vyos-build/packages/linux-kernel/linux-firmware
             vyos-build/packages/linux-kernel/accel-ppp
             vyos-build/packages/linux-kernel/**/*.deb
-          key: ${{ runner.os }}-${{ VYOS_VERSION }}-${{ env.VYOS_KERNEL_VERSION }}
+          key: ${{ runner.os }}-${{ env.VYOS_VERSION  }}-${{ env.VYOS_KERNEL_VERSION }}
 
       - name: Symlink kernel
         run: |
