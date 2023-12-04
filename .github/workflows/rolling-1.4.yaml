@@ -75,6 +75,7 @@ jobs:
         run: |
          git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
          git checkout -b ${{ env.VYOS_KERNEL_VERSION }}
+         git revert --no-edit 565736048bd5f9888990569993c6b6bfdf6dcb6d
 
       - name: Fetch linux-firmware sources
         working-directory: vyos-build/packages/linux-kernel
@@ -87,7 +88,6 @@ jobs:
         working-directory: vyos-build/packages/linux-kernel
         if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
         run: |
-          git revert 565736048bd5f9888990569993c6b6bfdf6dcb6d
           sudo ./build-kernel.sh
 
       - name: Compile linux firmware
