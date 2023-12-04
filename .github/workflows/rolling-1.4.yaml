@@ -74,8 +74,7 @@ jobs:
         if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
         run: |
          git clone https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-         git fetch
-         git checkout ${{ env.VYOS_KERNEL_VERSION }}
+         git checkout -b ${{ env.VYOS_KERNEL_VERSION }}
 
       - name: Fetch linux-firmware sources
         working-directory: vyos-build/packages/linux-kernel
