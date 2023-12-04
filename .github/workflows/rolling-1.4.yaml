@@ -13,7 +13,7 @@ env:
   VYOS_BUILD_BY: autobuild-vyos@samipsolutions.fi
   VYOS_BUILD_TYPE: release
   VYOS_VERSION: 1.4-rolling
-  VYOS_KERNEL_VERSION: v6.1.63
+  VYOS_KERNEL_VERSION: v6.1.65
 
 jobs:
   release:
