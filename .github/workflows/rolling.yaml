@@ -146,6 +146,8 @@ jobs:
       - name: Compile ixgbe module
         working-directory: vyos-build/packages/linux-kernel
         if: steps.kernel-module-ixgbe-cache-restore.outputs.cache-hit != 'true'
+        env:
+          CFLAGS: "-Wno-error=implicit-function-declaration"
         run: |
           sudo ./build-intel-ixgbe.sh
 
