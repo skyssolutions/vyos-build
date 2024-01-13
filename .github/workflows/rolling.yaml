@@ -84,7 +84,7 @@ jobs:
         if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
         run: |
          git clone https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
-         cd linux-firmware && git checkout 20230625
+         cd linux-firmware && git checkout 20231211
 
       - name: Compile kernel
         working-directory: vyos-build/packages/linux-kernel
@@ -103,7 +103,7 @@ jobs:
         if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
         run: |
           git clone https://github.com/accel-ppp/accel-ppp.git
-          cd accel-ppp && git checkout 9669bcb99adc && cd ..
+          cd accel-ppp && git checkout 19c36e593d9b && cd ..
           ./build-accel-ppp.sh
 
       - name: Compile Intel QAT (Quick-Assist Technology) drivers
