@@ -55,7 +55,7 @@ if [ -z $KERNEL_DIR ]; then
 fi
 
 echo "I: Compile Kernel module for Intel ${DRIVER_NAME} driver"
-make INSTALL_MOD_PATH=${DEBIAN_DIR} INSTALL_FW_PATH=${DEBIAN_DIR} -j $(getconf _NPROCESSORS_ONLN) install
+make INSTALL_MOD_PATH=${DEBIAN_DIR} INSTALL_FW_PATH=${DEBIAN_DIR} WERROR=0 -j $(getconf _NPROCESSORS_ONLN) install
 
 if [ "x$?" != "x0" ]; then
     exit 1
