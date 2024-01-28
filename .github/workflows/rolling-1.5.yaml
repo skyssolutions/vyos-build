@@ -1,5 +1,5 @@
 ---
-name: VyOS Rolling (1.5)
+name: VyOS Rolling with ixgb (1.5)
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ env:
   VYOS_BUILD_BY: autobuild-vyos@samipsolutions.fi
   VYOS_BUILD_TYPE: release
   VYOS_VERSION: 1.5-rolling
-  VYOS_KERNEL_VERSION: v6.6.11
+  VYOS_KERNEL_VERSION: v6.6.13
 
 jobs:
   release:
@@ -195,6 +195,8 @@ jobs:
           artifacts: "./vyos-build/build/vyos-${{ steps.vars.outputs.iso-name }}.iso"
           artifactErrorsFailBuild: true
           body: |
+            Includes the ixgbe out-of-tree driver.
+            
             Official VyOS Changelog:
             https://docs.vyos.io/en/latest/changelog/1.5.html
 
