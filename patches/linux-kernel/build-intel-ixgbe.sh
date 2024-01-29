@@ -46,6 +46,7 @@ fi
 mkdir -p ${DRIVER_DIR}
 tar -C ${DRIVER_DIR} --strip-components=1 -xf ${DRIVER_FILE}
 cp -v ${CWD}/custom-patches/patches/linux-kernel/ixgbe/common.mk ${DRIVER_DIR}/src
+patch ${DRIVER_DIR}/src/ixgbe_main.c ${CWD}/custom-patches/patches/linux-kernel/ixgbe/ixgbe_main_pci-error-reporting.patch
 sed -i 's/VXLAN_HEADROOM))/VXLAN_HF_RCO))/g' ${DRIVER_DIR}/src/ixgbe_main.c
 
 cd ${DRIVER_DIR}/src
