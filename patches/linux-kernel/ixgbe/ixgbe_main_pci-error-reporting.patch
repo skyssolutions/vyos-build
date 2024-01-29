@@ -1,19 +1,20 @@
---- src/ixgbe_main.c.orig       2024-01-28 23:23:45.524118332 +0100
-+++ src/ixgbe_main.c    2024-01-28 23:24:32.276287746 +0100
+--- src/ixgbe_main.c.orig	2024-01-29 06:20:32.546484028 +0100
++++ src/ixgbe_main.c	2024-01-29 06:21:14.162630776 +0100
 @@ -12704,8 +12704,6 @@
-        if (mac_type == ixgbe_mac_82598EB)
-                pci_disable_link_state(pdev, PCIE_LINK_STATE_L0S);
-
--       pci_enable_pcie_error_reporting(pdev);
+ 	if (mac_type == ixgbe_mac_82598EB)
+ 		pci_disable_link_state(pdev, PCIE_LINK_STATE_L0S);
+ 
+-	pci_enable_pcie_error_reporting(pdev);
 -
-        pci_set_master(pdev);
-
+ 	pci_set_master(pdev);
+ 
  #ifdef HAVE_TX_MQ
 @@ -13416,8 +13414,6 @@
-        disable_dev = !test_and_set_bit(__IXGBE_DISABLED, &adapter->state);
-        free_netdev(netdev);
-
--       pci_disable_pcie_error_reporting(pdev);
+ 	disable_dev = !test_and_set_bit(__IXGBE_DISABLED, &adapter->state);
+ 	free_netdev(netdev);
+ 
+-	pci_disable_pcie_error_reporting(pdev);
 -
-        if (disable_dev)
-                pci_disable_device(pdev);
+ 	if (disable_dev)
+ 		pci_disable_device(pdev);
+ 
