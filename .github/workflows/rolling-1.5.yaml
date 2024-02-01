@@ -1,5 +1,5 @@
 ---
-name: VyOS Rolling with ixgb (1.5)
+name: VyOS Rolling (1.5)
 
 on:
   workflow_dispatch:
