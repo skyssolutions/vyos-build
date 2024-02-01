@@ -13,7 +13,6 @@ env:
   VYOS_BUILD_BY: autobuild-vyos@samipsolutions.fi
   VYOS_BUILD_TYPE: release
   VYOS_VERSION: 1.5-rolling
-  VYOS_KERNEL_VERSION: v6.6.13
 
 jobs:
   release:
@@ -26,12 +25,6 @@ jobs:
       image: vyos/vyos-build:current
       options: --privileged
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          path: custom-patches
-          sparse-checkout: |
-            patches
       - name: Generate Token
         uses: tibdex/github-app-token@b62528385c34dbc9f38e5f4225ac829252d1ea92 # v1.8.0
         id: generate-token
@@ -56,117 +49,6 @@ jobs:
           latest: true
           fileName: "*amd64.deb"
           out-file-path: vyos-build/packages
-
-      - name: Copy custom patches to linux-kernel folder
-        run: |
-          cp -Rv custom-patches/ vyos-build/packages/linux-kernel/
-          mv -v vyos-build/packages/linux-kernel/custom-patches/patches/linux-kernel/build-intel-ixgbe.sh vyos-build/packages/linux-kernel/
-
-      - name: Restore cached kernel and module sources
-        id: cache-kernel-restore
-        uses: buildjet/cache/restore@v3
-        with:
-          path: |
-            vyos-build/packages/linux-kernel/linux
-            vyos-build/packages/linux-kernel/kernel-vars
-            vyos-build/packages/linux-kernel/linux-firmware
-            vyos-build/packages/linux-kernel/accel-ppp
-            vyos-build/packages/linux-kernel/**/*.deb
-          key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}
-
-      - name: Fetch kernel sources
-        working-directory: vyos-build/packages/linux-kernel
-        if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
-        run: git clone -b ${{ env.VYOS_KERNEL_VERSION }} --single-branch https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-
-      - name: Fetch linux-firmware sources
-        working-directory: vyos-build/packages/linux-kernel
-        if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
-        run: |
-          git clone https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
-          cd linux-firmware && git checkout 20231211
-
-      - name: Compile kernel
-        working-directory: vyos-build/packages/linux-kernel
-        if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
-        run: |
-          sudo ./build-kernel.sh
-
-      - name: Compile linux firmware
-        working-directory: vyos-build/packages/linux-kernel
-        if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
-        run: |
-          ./build-linux-firmware.sh
-
-      - name: Compile Accel-PPP out-of-tree module
-        working-directory: vyos-build/packages/linux-kernel
-        if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
-        run: |
-          git clone https://github.com/accel-ppp/accel-ppp.git
-          cd accel-ppp && git checkout 19c36e593d9b && cd ..
-          ./build-accel-ppp.sh
-
-      - name: Compile Intel QAT (Quick-Assist Technology) drivers
-        working-directory: vyos-build/packages/linux-kernel
-        if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
-        run: |
-          ./build-intel-qat.sh
-
-      - name: Save kernel and some of the module sources to cache
-        uses: buildjet/cache/save@v3
-        if: steps.cache-kernel-restore.outputs.cache-hit != 'true'
-        id: kernel-cache
-        with:
-          path: |
-            vyos-build/packages/linux-kernel/linux
-            vyos-build/packages/linux-kernel/kernel-vars
-            vyos-build/packages/linux-kernel/linux-firmware
-            vyos-build/packages/linux-kernel/accel-ppp
-            vyos-build/packages/linux-kernel/**/*.deb
-          key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}
-
-      - name: Symlink kernel
-        run: |
-          mkdir -p /usr/src
-          ln -sv $GITHUB_WORKSPACE/vyos-build/packages/linux-kernel/linux /usr/src/linux
-
-      - name: Debug ls of packages and linux-kernel folder
-        run: |
-          ls -al vyos-build/packages
-          ls -al vyos-build/packages/linux-kernel/
-
-      - name: Restore cached ixgbe kernel module
-        id: kernel-module-ixgbe-cache-restore
-        uses: buildjet/cache/restore@v3
-        with:
-          path: |
-            vyos-build/packages/linux-kernel/ixgbe**
-          key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}-ixgbe
-
-      - name: Compile ixgbe module
-        working-directory: vyos-build/packages/linux-kernel
-        if: steps.kernel-module-ixgbe-cache-restore.outputs.cache-hit != 'true'
-        run: |
-          sudo ./build-intel-ixgbe.sh
-
-      - name: Save ixgbe module to cache
-        uses: buildjet/cache/save@v3
-        if: steps.kernel-module-ixgbe-cache-restore.outputs.cache-hit != 'true'
-        id: kernel-module-ixgbe-cache
-        with:
-          path: |
-            vyos-build/packages/linux-kernel/ixgbe-5.19.6/*
-          key: ${{ runner.os }}-${{ env.VYOS_KERNEL_VERSION }}-ixgbe
-
-      - name: "Create symbolic links for cached .deb files"
-        if: steps.cache-kernel-restore.outputs.cache-hit == 'true' || steps.kernel-module-ixgbe-cache-restore.outputs.cache-hit == 'true'
-        shell: bash
-        run: |
-          cd vyos-build/packages/linux-kernel
-          for package in $(ls linux-*.deb)
-          do
-              ln -sf linux-kernel/$package ..
-          done
 
       - name: Configure
         working-directory: vyos-build
@@ -195,8 +77,6 @@ jobs:
           artifacts: "./vyos-build/build/vyos-${{ steps.vars.outputs.iso-name }}.iso"
           artifactErrorsFailBuild: true
           body: |
-            Includes the ixgbe out-of-tree driver.
-            
             Official VyOS Changelog:
             https://docs.vyos.io/en/latest/changelog/1.5.html
 

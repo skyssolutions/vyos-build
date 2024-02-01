@@ -1,6 +1,6 @@
 # vyos
 
-VyOS **1.4-rolling** and **1.5-rolling** with additional packages and custom kernel with out-of-tree ixgbe driver.
+VyOS **1.4-rolling** and **1.5-rolling** with additional packages.
 
 ## Packages
 
