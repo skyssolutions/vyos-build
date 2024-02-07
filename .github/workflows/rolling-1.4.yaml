@@ -16,7 +16,7 @@ env:
 
 jobs:
   release:
-    runs-on: buildjet-8vcpu-ubuntu-2204
+    runs-on: arc-sol
     permissions:
       # Need permission to write to the Releases tab now.
       # https://github.com/ncipollo/release-action/issues/208.
