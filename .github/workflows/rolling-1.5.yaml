@@ -4,7 +4,7 @@ name: VyOS Rolling (1.5)
 on:
   workflow_dispatch:
   schedule:
-    - cron: 0 6 * * 1
+    - cron: 30 6 1,15 * *
 
 env:
   VYOS_URL: https://github.com/vyos/vyos-build
