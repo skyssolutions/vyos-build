@@ -54,6 +54,7 @@ jobs:
         working-directory: vyos-build
         run: |
           sudo make clean
+          sudo mkdir -p build
           sudo ./build-vyos-image iso \
               --architecture ${{ env.VYOS_ARCH }} \
               --build-by ${{ env.VYOS_BUILD_BY }} \
