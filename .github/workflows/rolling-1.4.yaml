@@ -11,7 +11,7 @@ env:
   VYOS_BRANCH: sagitta
   VYOS_ARCH: amd64
   VYOS_BUILD_BY: autobuild-vyos@samipsolutions.fi
-  VYOS_BUILD_TYPE: release
+  VYOS_BUILD_TYPE: rolling
   VYOS_VERSION: 1.4-rolling
 
 jobs:
