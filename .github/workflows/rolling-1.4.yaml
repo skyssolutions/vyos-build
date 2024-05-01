@@ -7,11 +7,11 @@ on:
     - cron: 30 6 1,15 * *
 
 env:
-  VYOS_URL: https://github.com/vyos/vyos-build
+  VYOS_URL: https://git.samipsolutions.fi/vyos/vyos-build-custom
   VYOS_BRANCH: sagitta
   VYOS_ARCH: amd64
   VYOS_BUILD_BY: autobuild-vyos@samipsolutions.fi
-  VYOS_BUILD_TYPE: rolling
+  VYOS_BUILD_TYPE: release
   VYOS_VERSION: 1.4-rolling
 
 jobs:
